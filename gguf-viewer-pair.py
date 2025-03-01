@@ -200,7 +200,6 @@ class GGUFViewer(QMainWindow):
         self.setup_ui()
         
     def create_panels(self):
-        # Create the panels before the menu bar so they can be referenced
         self.left_panel = GGUFPanel()
         self.right_panel = GGUFPanel()
         self.comparison_tree = QTreeWidget()
@@ -208,7 +207,7 @@ class GGUFViewer(QMainWindow):
         self.comparison_tree.setColumnWidth(0, 300)
         self.comparison_tree.setColumnWidth(1, 300)
         self.comparison_tree.setVisible(False)
-        
+
     def setup_ui(self):
         # Create central widget with splitter
         central_widget = QWidget()
@@ -224,6 +223,13 @@ class GGUFViewer(QMainWindow):
         
         layout.addWidget(splitter)
         layout.addWidget(self.comparison_tree)
+        
+        # Get references to the vertical scrollbars
+        left_vsb = self.left_panel.tree.verticalScrollBar()
+        right_vsb = self.right_panel.tree.verticalScrollBar()
+       
+        left_vsb.valueChanged.connect(right_vsb.setValue)
+        right_vsb.valueChanged.connect(left_vsb.setValue)
         
     def create_menu_bar(self):
         menubar = self.menuBar()
